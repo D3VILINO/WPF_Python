@@ -72,8 +72,7 @@ def handle_menu(database):
       elif selection == 2:
         add_password(database)
       elif selection == 3:
-        pass
-        # delete_password(database)
+        delete_password(database)
       elif selection == 4:
         pass
         # update_password(database)
@@ -124,7 +123,29 @@ def add_password(database):
   file.close()
 
 def delete_password(database):
-  pass
+  to_delete = input("Enter index of the password which is to be deteled: ")
+  if not 0 < int(to_delete) < number_of_lines(database):
+    print("Please look at possible indices.")
+
+  file = open(database, "r")
+  lines = file.readlines()
+  file.close()
+
+  file = open(database, "w")
+  successfull_delete = False
+  for line in lines: 
+    data = line.strip().split(";")
+    if not successfull_delete:
+      if data[0] == to_delete:
+        successfull_delete = True
+        continue
+    else:
+      data[0] = str(int(data[0]) - 1)
+    file.write(";".join(data) + "\n")
+  file.close()
+
+  
+  
 
 def update_password(database):
   pass
