@@ -1,11 +1,15 @@
 import os.path
 
+# die txt wird dort erstellt und nach der Existenz geprüft, je nach aktuellem Pfad im Terminal. Habe dafür innerhalb der Zeit keine Lösung gefunden.
 def main():
   try:
     database = get_database() # Database like "nameOfDatabase.txt"
     while True:
-      print_menu(database)
-      handle_menu(database)
+      try:
+        print_menu(database)
+        handle_menu(database)
+      except (ValueError, TypeError):
+        print("Please enter a valid selection (except)\n")
   except KeyboardInterrupt:
     exit(0)
 
@@ -21,7 +25,11 @@ def get_database() -> str:
       selection = int(input("What do you want to do? "))
 
       if selection == 1:
-        database = create_database()
+        if check_database():
+          print("Your database already exists")
+          continue
+        else:
+          database = create_database()
       elif selection == 2:
         database = input("Please enter the name of the database you want to open: ")
         if not database.__contains__(".txt"): # keine gute, aber wenigstens irgendeine Überprüfung
@@ -37,7 +45,7 @@ def get_database() -> str:
         continue
       return database
     except (ValueError, TypeError):
-      print("Please enter a valid selection\n")
+      print("Please enter a valid selection (except)\n")
 
 def create_database() -> str:
   database = input("Please enter the name of the database you want to create: ")
@@ -48,10 +56,10 @@ def create_database() -> str:
       file.close()
   return database
 
-def check_database(database) -> bool:
+def check_database(database: str) -> bool:
   return os.path.exists(database)
 
-def print_menu(database) -> None:
+def print_menu(database: str) -> None:
   print("=" * 41,
         f"Passwordmanager ({database})".center(41),
         "=" * 41,
@@ -62,40 +70,48 @@ def print_menu(database) -> None:
         "    5) Exit",
         sep="\n")
 
-def handle_menu(database) -> None:
+def handle_menu(database: str) -> None:
   selection = int(0)
   while True:
-    try:
-      selection = int(input("What do you like to do? "))
-      if selection == 1:
-        print_passwords(database)
-      elif selection == 2:
-        add_password(database)
-      elif selection == 3:
-        delete_password(database)
-      elif selection == 4:
-        update_password(database)
-      elif selection == 5:
-        print("Maybe next time. Seeya!")
-        exit(0)
-      else:
-        print("Please enter a valid selection\n")
-        continue
-      break
-    except (ValueError, TypeError):
-      print("Please enter a valid selection (except)\n")
+    selection = int(input("What do you like to do? "))
+    if selection == 1:
+      print_passwords(database)
+    elif selection == 2:
+      add_password(database)
+    elif selection == 3:
+      delete_password(database)
+    elif selection == 4:
+      update_password(database)
+    elif selection == 5:
+      print("Maybe next time. Seeya!")
+      exit(0)
+    else:
+      print("Please enter a valid selection\n")
+      continue
+    break
 
-# TODO: Formatieren
-def print_passwords(database):
+# Eine lange URL zerschießt die Formatierung. ist also quasi wie bei MariaDB xd
+def print_passwords(database: str, width:int = 120) -> None:
+  header = ("Index", "Name", "Password", "URL", "Note")
+  print(" " + "=" * (width + 4 - (width % 2)))
+  for item in header:
+    print(f"|{item:^{width // 5}}", end="")
+  print("|")
+  print(" " + "=" * (width + 4 - (width % 2)))
+
   file = open(database, "r")
-  for line in file:
-    print(line.rstrip())
+  lines = file.readlines()
+  for line in lines[1:]:
+    data = line.strip().split(";")
+    for d in data:
+      print(f"|{d:^{width // 5}}", end="")
+    print("|")
+    print(" " + "-" * (width + 4 - (width % 2)))
   file.close()
   print("\n")
 
-# TODO: Validation, ob Name und Password gesetzt sind und ob der Index bereits vergeben ist.
-def add_password(database):
-  # Index;Name;Password;URL;Note
+# Man könnte noch "validieren": wurde "Name" und "Password" gesetzt.
+def add_password(database: str) -> None:
   data_row = {"Index": None, "Name": None, "Password": None, "URL": "None", "Note": "None"}
   data_row.update({"Index": str(number_of_lines(database))})
   data_row.update({"Name": input("Name for password: ")})
@@ -115,14 +131,13 @@ def add_password(database):
   content = file.read()
   file.close()
 
-  if content.endswith(";"):
-      content = content[:-1]
+  content = content[:-1]
 
   file = open(database, "w")
   file.write(content + "\n")
   file.close()
 
-def delete_password(database):
+def delete_password(database: str) -> None:
   to_delete = input("Enter index of the password which is to be deteled: ")
   if not 0 < int(to_delete) < number_of_lines(database):
     print("Please look at possible indices.")
@@ -144,7 +159,7 @@ def delete_password(database):
     file.write(";".join(data) + "\n")
   file.close()
 
-def update_password(database):
+def update_password(database: str) -> None:
   to_update = input("Enter index of the password which is to be updated: ")
   if not 0 < int(to_update) < number_of_lines(database):
     print("Please look at possible indices.")
