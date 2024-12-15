@@ -62,7 +62,7 @@ def print_menu(database) -> None:
         "    5) Exit",
         sep="\n")
 
-def handle_menu(database):
+def handle_menu(database) -> None:
   selection = int(0)
   while True:
     try:
@@ -74,8 +74,7 @@ def handle_menu(database):
       elif selection == 3:
         delete_password(database)
       elif selection == 4:
-        pass
-        # update_password(database)
+        update_password(database)
       elif selection == 5:
         print("Maybe next time. Seeya!")
         exit(0)
@@ -86,6 +85,7 @@ def handle_menu(database):
     except (ValueError, TypeError):
       print("Please enter a valid selection (except)\n")
 
+# TODO: Formatieren
 def print_passwords(database):
   file = open(database, "r")
   for line in file:
@@ -144,11 +144,32 @@ def delete_password(database):
     file.write(";".join(data) + "\n")
   file.close()
 
-  
-  
-
 def update_password(database):
-  pass
+  to_update = input("Enter index of the password which is to be updated: ")
+  if not 0 < int(to_update) < number_of_lines(database):
+    print("Please look at possible indices.")
+
+  file = open(database, "r")
+  lines = file.readlines()
+  file.close()
+
+  file = open(database, "w")
+  for line in lines: 
+    data = line.strip().split(";")
+    if data[0] == to_update:
+      print("What do you want to change?",
+            "    1) Name",
+            "    2) Password",
+            "    3) URL",
+            "    4) Note",
+            "    5) Nothing",
+            sep="\n")
+      selection = int(input("Choose selection: "))
+      if 0 < selection < 5:
+        new_value = input("Enter new value: ")
+        data[selection] = new_value
+    file.write(";".join(data) + "\n")
+  file.close()
 
 def number_of_lines(database) -> int:
   """Including the header"""
