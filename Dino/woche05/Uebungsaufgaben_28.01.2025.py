@@ -54,7 +54,32 @@ class AufgabenManager:
     return minPrio
 
   def erledigeNaechsteAufgabe(self):
-    pass
+    prio = self.hoechstePrio()
+    aufgaben = []
+    for aufgabe in self.aufgaben:
+      if self.aufgaben[aufgabe] == prio:
+        aufgaben.append(aufgabe)
+    self.aufgaben.pop(aufgaben[-1])
+    return aufgaben[-1]
+
+  def anzahlAufgabenPrio(self, prio = 0):
+    anzahl = 0
+    for aufgabe in self.aufgaben:
+      if prio == self.aufgaben[aufgabe]:
+        anzahl += 1
+    return anzahl
+
+  def anzahlAufgaben(self):
+    return len(self.aufgaben)
+
+  def allePrios(self):
+    print("Priorität: Anzahl")
+    prios = {}
+    for aufgabe in self.aufgaben:
+      for prio in prios:
+        if self.aufgaben[aufgabe] == prio:
+
+
 
 aufgs = AufgabenManager()
 aufgs.neueAufgabe("Kueche putzen", 5)
@@ -62,8 +87,8 @@ aufgs.neueAufgabe("Auf Prog 1 lernen", 1)
 aufgs.neueAufgabe("Oma besuchen", 2)
 aufgs.neueAufgabe("Auf Mathe 1 lernen", 1)
 aufgs.neueAufgabe("Fahrrad putzen", 10)
-# aufgs.erledigeNaechsteAufgabe ()
-# aufgs.erledigeNaechsteAufgabe ()
+print(aufgs.erledigeNaechsteAufgabe ())
+print(aufgs.erledigeNaechsteAufgabe ())
 print(aufgs.hoechstePrio())
-# print(aufgs.anzahlAufgabenPrio())
-# print(anzahlAufgaben())
+print(aufgs.anzahlAufgabenPrio())
+print(aufgs.anzahlAufgaben())
