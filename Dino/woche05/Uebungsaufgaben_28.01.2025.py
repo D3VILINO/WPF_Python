@@ -74,10 +74,17 @@ class AufgabenManager:
 
   def allePrios(self):
     print("Priorität: Anzahl")
-    prios = {}
+    prios = {0: 0}
     for aufgabe in self.aufgaben:
+      changedValue = False
       for prio in prios:
         if self.aufgaben[aufgabe] == prio:
+          prios[prio] += 1
+          changedValue = True
+      if changedValue == False:
+        prios[self.aufgaben[aufgabe]] = 1
+    return prios
+          
 
 
 
@@ -87,8 +94,10 @@ aufgs.neueAufgabe("Auf Prog 1 lernen", 1)
 aufgs.neueAufgabe("Oma besuchen", 2)
 aufgs.neueAufgabe("Auf Mathe 1 lernen", 1)
 aufgs.neueAufgabe("Fahrrad putzen", 10)
+aufgs.neueAufgabe("Lustig sein", 2)
 print(aufgs.erledigeNaechsteAufgabe ())
 print(aufgs.erledigeNaechsteAufgabe ())
 print(aufgs.hoechstePrio())
 print(aufgs.anzahlAufgabenPrio())
-print(aufgs.anzahlAufgaben())
+print(str(aufgs.anzahlAufgaben()) + "\n")
+print(aufgs.allePrios())
