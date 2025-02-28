@@ -23,15 +23,14 @@ def get_database() -> str:
             "    3) Cancel",
             sep="\n")
       selection = int(input("What do you want to do? "))
-
+      database = input("Please enter the name of the database you want to open: ")
       if selection == 1:
-        if check_database():
+        if check_database(database):
           print("Your database already exists")
           continue
         else:
           database = create_database()
       elif selection == 2:
-        database = input("Please enter the name of the database you want to open: ")
         if not database.__contains__(".txt"): # keine gute, aber wenigstens irgendeine Überprüfung
           database += ".txt"
         if not check_database(database):
@@ -112,7 +111,7 @@ def print_passwords(database: str, width:int = 120) -> None:
 
 # Man könnte noch "validieren": wurde "Name" und "Password" gesetzt.
 def add_password(database: str) -> None:
-  data_row = {"Index": None, "Name": None, "Password": None, "URL": "None", "Note": "None"}
+  data_row = {"Index": "", "Name": "", "Password": "", "URL": "None", "Note": "None"}
   data_row.update({"Index": str(number_of_lines(database))})
   data_row.update({"Name": input("Name for password: ")})
   data_row.update({"Password": input("Password: ")}) # man könnte noch eine wiederholte Eingabe erfragen, aber das ist mehr Aufwand und muss nicht gewollt sein --> eine "Einstellung", ob man das will?
