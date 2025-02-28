@@ -1,28 +1,23 @@
-class Recipe:
-  def __init__(self, name, ingredients:tuple, quantity:int):
-    self.__name = name
-    self.__ingredients = ingredients
-    self.__quantity = quantity
-    self.__price = 0
+from Ingredient import Ingredient
 
-  def calculate_price(self):
-    price = 50
-    if (type(self.__ingredients) == tuple):
-      for i in range(len(self.__ingredients)):
-        price += self.__ingredients[i].get_price() * self.__quantity[i]
-    else:
-      price += self.__ingredients.get_price() * self.__quantity
-    self.__price = price
+class Recipe:
+  def __init__(self, name:str, ingredients:dict[Ingredient, int]) -> None:
+    self.__name:str = name
+    self.__ingredients:dict[Ingredient, int] = ingredients
+    self.__price:int = self.calculate_price()
+
+  def calculate_price(self) -> int:
+    price:int = 50
+    for ingredient, quantity in self.__ingredients.items():
+      price += ingredient.get_price() * quantity
+    print(price)
     return price
 
-  def get_quantities(self):
-    return self.__quantity
-
-  def get_name(self):
+  def get_name(self) -> str:
     return self.__name
 
-  def get_price(self):
+  def get_price(self) -> int:
     return self.__price
 
-  def get_ingredients(self):
+  def get_ingredients(self) -> dict[Ingredient, int]:
     return self.__ingredients
