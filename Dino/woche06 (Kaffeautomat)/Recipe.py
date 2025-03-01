@@ -10,7 +10,6 @@ class Recipe:
     price:int = 50
     for ingredient, quantity in self.__ingredients.items():
       price += ingredient.get_price() * quantity
-    print(price)
     return price
 
   def get_name(self) -> str:
