@@ -17,7 +17,7 @@ coffeMachine:CoffeMachine = CoffeMachine("New Model", [r_espresso, r_macchiato, 
 while True:
   try:
     if(coffeMachine.get_state() == False):
-      start = input("Machine is offline. Would you like to start the Machine? y/n: ").lower()
+      start = input("Machine is offline. Would you like to start the machine? y/n: ").lower()
       if start == "n":
         print("Goodbye")
         exit(0)
