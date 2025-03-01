@@ -1,5 +1,10 @@
+from time import sleep
 from Recipe import Recipe
 from Ingredient import Ingredient
+from CashRegister import CashRegister
+
+def indentation(s, length:int = 2) -> str:
+  return str(len(str(s)) + length)
 
 class CoffeMachine():
   __options:tuple = ("Get a Coffe", "Show Recipe for a Coffe", "Show all Recipies")
@@ -8,6 +13,7 @@ class CoffeMachine():
     self.__state:bool = False
     self.__model:str = model
     self.__recipes:list[Recipe] = recipes
+    self.__cashRegister:CashRegister = CashRegister()
 
   def get_recipes(self) -> list:
     return self.__recipes
@@ -34,8 +40,8 @@ class CoffeMachine():
     return self.__state
 
   def printOptions(self) -> None:
-    for i in range(len(self.__options)):
-      print(f"{i + 1}. " + self.__options[i])
+    for i in range(1, len(self.__options) + 1):
+      print(f"{i:>{indentation(i)}}. " + self.__options[i - 1])
 
   def add_recipe(self, recipe:Recipe) -> None:
     self.__recipes.append(recipe)
@@ -44,7 +50,7 @@ class CoffeMachine():
     ingredients:dict[Ingredient, int] = self.__recipes[index].get_ingredients()
     print(f"{index + 1}. " + self.__recipes[index].get_name() + ": ")
     for ingredient, quantity in ingredients.items():
-      print(f"{'x':>5}" + str(quantity) + " " + ingredient.get_name())
+      print(f"{'x':>{indentation("x")}}" + str(quantity) + " " + ingredient.get_name())
     print()
 
   def printAllRecipes_detailed(self) -> None:
@@ -52,13 +58,13 @@ class CoffeMachine():
       self.print_recipe(i)
 
   def printAllRecipes(self) -> None:
-    for i in range(len(self.__recipes)):
-      print(f"{i + 1}. " + self.__recipes[i].get_name())
+    for i in range(1, len(self.__recipes) + 1):
+      print(f"{i:>{indentation(i)}}. " + self.__recipes[i - 1].get_name())
   
   def handleInputs(self) -> None:
     while(True):
       try:
-        index:int = int(input("Type here: ")) + 1
+        index:int = int(input("Type here: "))
         print()
         match index:
           case 1:
@@ -66,7 +72,8 @@ class CoffeMachine():
             self.printAllRecipes()
             index = int(input("Type here: ")) - 1
             print()
-            # self.makeCoffe()
+            # self.__cashRegister.takeMoney()
+            self.makeCoffe(index)
           case 2:
             index = int(input(f"Which recipe would you like to see? 1-{len(self.__recipes)}: ")) - 1
             self.print_recipe(index)
@@ -81,6 +88,11 @@ class CoffeMachine():
       except KeyboardInterrupt:
         exit(0)
     
-
-
-    
+  def makeCoffe(self, index:int) -> None:
+    print("Starting Process... Adding: ")
+    ingredients:dict[Ingredient, int] = self.__recipes[index].get_ingredients()
+    for ingredient, quantity in ingredients.items():
+      for i in range(quantity):
+        name:str = ingredient.get_name() 
+        print(f"{name:>{indentation(name)}}")
+        sleep(1)
