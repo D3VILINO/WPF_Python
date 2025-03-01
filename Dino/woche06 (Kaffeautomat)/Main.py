@@ -12,10 +12,20 @@ r_macchiato:Recipe = Recipe("Espresso Macchiato", {i_espresso: 1, i_foam: 1})
 r_cappuccino:Recipe = Recipe("Cappuccino", {i_espresso: 1, i_milk: 1, i_foam: 2})
 r_latte:Recipe = Recipe("Café Latte", {i_milk: 2, i_foam: 1, i_espresso: 1})
 
-coffeMachine:CoffeMachine = CoffeMachine("New Model", [r_espresso, r_macchiato, r_cappuccino])
-coffeMachine.add_recipe(r_latte)
+coffeMachine:CoffeMachine = CoffeMachine("New Model", [r_espresso, r_macchiato, r_cappuccino, r_latte])
+# coffeMachine.add_recipe(r_latte)
 # coffeMachine.print_recipe(2)
 # coffeMachine.printAllRecipes_detailed()
-coffeMachine.printAllRecipes()
-coffeMachine.toggleOnOff()
-coffeMachine.handleInputs()
+# coffeMachine.printAllRecipes()
+
+while True:
+  if(coffeMachine.get_state() == False):
+    start = input("Machine is offline. Would you like to start the Machine? y/n: ").lower()
+    if start == "n":
+      print("Goodbye")
+      exit(0)
+    elif start == "y":
+      coffeMachine.toggleOnOff()
+    else:
+      continue
+  coffeMachine.handleInputs()

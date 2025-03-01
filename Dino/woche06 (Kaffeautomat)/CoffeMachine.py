@@ -2,12 +2,10 @@ from time import sleep
 from Recipe import Recipe
 from Ingredient import Ingredient
 from CashRegister import CashRegister
-
-def indentation(s, length:int = 2) -> str:
-  return str(len(str(s)) + length)
+from utils import indentation
 
 class CoffeMachine():
-  __options:tuple = ("Get a Coffe", "Show Recipe for a Coffe", "Show all Recipies")
+  __options:tuple = ("Get a Coffe", "Show Recipe for a Coffe", "Show all Recipies", "Turn Machine off")
 
   def __init__(self, model:str, recipes:list[Recipe]): 
     self.__state:bool = False
@@ -35,8 +33,6 @@ class CoffeMachine():
       print("-" * width)
       print(f"{greeting:^{width}}")
       print("-" * width)
-      print("\nWhat would you like me to do?")
-      self.printOptions()
     return self.__state
 
   def printOptions(self) -> None:
@@ -64,6 +60,8 @@ class CoffeMachine():
   def handleInputs(self) -> None:
     while(True):
       try:
+        print("What would you like me to do?")
+        self.printOptions()
         index:int = int(input("Type here: "))
         print()
         match index:
@@ -72,18 +70,20 @@ class CoffeMachine():
             self.printAllRecipes()
             index = int(input("Type here: ")) - 1
             print()
-            # self.__cashRegister.takeMoney()
+            exchange:int = self.__cashRegister.takeMoney(self.__recipes[index].get_price())
+            self.__cashRegister.giveExchangeMoney(exchange)
             self.makeCoffe(index)
           case 2:
             index = int(input(f"Which recipe would you like to see? 1-{len(self.__recipes)}: ")) - 1
             self.print_recipe(index)
           case 3:
             self.printAllRecipes_detailed()
+          case 4: 
+            self.toggleOnOff()
+            break
           case _:
             print("Select one of the given options e.g: '1'\n")
-            continue
-        break
-      except ValueError:
+      except (ValueError, IndexError):
         print("Select one of the given options e.g: '1'\n")
       except KeyboardInterrupt:
         exit(0)
@@ -96,3 +96,5 @@ class CoffeMachine():
         name:str = ingredient.get_name() 
         print(f"{name:>{indentation(name)}}")
         sleep(1)
+    print("\nPlease enjoy your fresh " + self.__recipes[index].get_name() + "\n")
+    sleep(2)
