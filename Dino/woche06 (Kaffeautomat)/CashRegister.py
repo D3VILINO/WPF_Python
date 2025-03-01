@@ -25,8 +25,6 @@ class CashRegister:
         return price
       except ValueError:
         print("\nInput 2, 1 or 50")
-      except KeyboardInterrupt:
-        exit(0)
 
   def giveExchangeMoney(self, exchange:int) -> None:
     exchangeList:dict[str, int] = {"2€": 0, "1€": 0, "0.50€": 0}

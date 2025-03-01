@@ -1,4 +1,3 @@
-# class CashRegister():
 from Recipe import Recipe
 from Ingredient import Ingredient
 from CoffeMachine import CoffeMachine
@@ -19,13 +18,16 @@ coffeMachine:CoffeMachine = CoffeMachine("New Model", [r_espresso, r_macchiato, 
 # coffeMachine.printAllRecipes()
 
 while True:
-  if(coffeMachine.get_state() == False):
-    start = input("Machine is offline. Would you like to start the Machine? y/n: ").lower()
-    if start == "n":
-      print("Goodbye")
-      exit(0)
-    elif start == "y":
-      coffeMachine.toggleOnOff()
-    else:
-      continue
-  coffeMachine.handleInputs()
+  try:
+    if(coffeMachine.get_state() == False):
+      start = input("Machine is offline. Would you like to start the Machine? y/n: ").lower()
+      if start == "n":
+        print("Goodbye")
+        exit(0)
+      elif start == "y":
+        coffeMachine.toggleOnOff()
+      else:
+        continue
+    coffeMachine.handleInputs()
+  except KeyboardInterrupt:
+    exit(0)

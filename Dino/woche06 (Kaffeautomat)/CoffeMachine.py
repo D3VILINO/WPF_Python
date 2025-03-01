@@ -5,8 +5,6 @@ from CashRegister import CashRegister
 from utils import indentation
 
 class CoffeMachine():
-  __options:tuple = ("Get a Coffe", "Show Recipe for a Coffe", "Show all Recipies", "Turn Machine off")
-
   def __init__(self, model:str, recipes:list[Recipe]): 
     self.__state:bool = False
     self.__model:str = model
@@ -36,15 +34,16 @@ class CoffeMachine():
     return self.__state
 
   def printOptions(self) -> None:
-    for i in range(1, len(self.__options) + 1):
-      print(f"{i:>{indentation(i)}}. " + self.__options[i - 1])
+    options:tuple = ("Get a Coffe", "Show Recipe for a Coffe", "Show all Recipies", "Turn Machine off")
+    for i in range(1, len(options) + 1):
+      print(f"{i:>{indentation(i)}}. " + options[i - 1])
 
   def add_recipe(self, recipe:Recipe) -> None:
     self.__recipes.append(recipe)
 
   def print_recipe(self, index:int) -> None:
     ingredients:dict[Ingredient, int] = self.__recipes[index].get_ingredients()
-    print(f"{index + 1}. " + self.__recipes[index].get_name() + ": ")
+    print(self.__recipes[index].get_name() + ": ")
     for ingredient, quantity in ingredients.items():
       print(f"{'x':>{indentation("x")}}" + str(quantity) + " " + ingredient.get_name())
     print()
@@ -75,6 +74,7 @@ class CoffeMachine():
             self.makeCoffe(index)
           case 2:
             index = int(input(f"Which recipe would you like to see? 1-{len(self.__recipes)}: ")) - 1
+            print()
             self.print_recipe(index)
           case 3:
             self.printAllRecipes_detailed()
@@ -85,8 +85,6 @@ class CoffeMachine():
             print("Select one of the given options e.g: '1'\n")
       except (ValueError, IndexError):
         print("Select one of the given options e.g: '1'\n")
-      except KeyboardInterrupt:
-        exit(0)
     
   def makeCoffe(self, index:int) -> None:
     print("Starting Process... Adding: ")
