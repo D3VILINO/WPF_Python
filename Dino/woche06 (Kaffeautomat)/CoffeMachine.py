@@ -11,9 +11,6 @@ class CoffeMachine():
     self.__recipes:list[Recipe] = recipes
     self.__cashRegister:CashRegister = CashRegister()
 
-  def get_recipes(self) -> list:
-    return self.__recipes
-
   def get_model(self) -> str:
     return self.__model
 
@@ -69,9 +66,11 @@ class CoffeMachine():
             self.printAllRecipes()
             index = int(input("Type here: ")) - 1
             print()
-            exchange:int = self.__cashRegister.takeMoney(self.__recipes[index].get_price())
-            self.__cashRegister.giveExchangeMoney(exchange)
-            self.makeCoffe(index)
+            if self.__cashRegister.takeMoney(self.__recipes[index].get_price()) != False:
+              self.makeCoffe(index)
+              akk = self.__cashRegister.getMoney()
+              for i in akk:
+                print(i)
           case 2:
             index = int(input(f"Which recipe would you like to see? 1-{len(self.__recipes)}: ")) - 1
             print()

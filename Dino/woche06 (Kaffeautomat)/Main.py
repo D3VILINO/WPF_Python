@@ -13,9 +13,6 @@ r_latte:Recipe = Recipe("Café Latte", {i_milk: 2, i_foam: 1, i_espresso: 1})
 
 coffeMachine:CoffeMachine = CoffeMachine("New Model", [r_espresso, r_macchiato, r_cappuccino, r_latte])
 # coffeMachine.add_recipe(r_latte)
-# coffeMachine.print_recipe(2)
-# coffeMachine.printAllRecipes_detailed()
-# coffeMachine.printAllRecipes()
 
 while True:
   try:
