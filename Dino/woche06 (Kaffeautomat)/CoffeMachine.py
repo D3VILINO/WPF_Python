@@ -1,3 +1,5 @@
+from CashMachine import CashMachine
+
 class CoffeMachine():
   def __init__(self, model, recipes):
     self.__state = False
