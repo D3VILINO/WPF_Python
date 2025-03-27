@@ -13,5 +13,6 @@ root.pack(anchor="center", fill="both", pady="10", padx="10")
 
 contents.create_display(root)
 contents.create_left_collumn(root)
+contents.create_body(root)
 
 window.mainloop()
