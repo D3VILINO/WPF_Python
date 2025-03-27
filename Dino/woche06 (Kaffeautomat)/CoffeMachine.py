@@ -1,12 +1,9 @@
-<<<<<<< HEAD
 from CashMachine import CashMachine
-=======
 from time import sleep
 from Recipe import Recipe
 from Ingredient import Ingredient
 from CashRegister import CashRegister
 from utils import indentation
->>>>>>> 0f9c81ab68e476f16cdcc67bab861903eb963303
 
 class CoffeMachine():
   def __init__(self, model:str, recipes:list[Recipe]): 
