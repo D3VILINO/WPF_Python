@@ -1,7 +1,10 @@
 from functools import partial
-from tkinter import END, Button, Entry, Frame, Label
+from tkinter import END, Button, Frame, Label
+from utils import *
+from math import sqrt # damit eval() wurzeln berechnen kann
 
 label_display:Label
+label_what:Label
 
 def create_calculator(master:Frame) -> None:
   _create_display(master)
@@ -16,10 +19,11 @@ def _create_display(master:Frame) -> None:
   label_display.pack(padx=1, pady=1)
 
 def _create_left_collumn(master:Frame) -> None:
+  global label_what
   frame_left_column = Frame(master)
   frame_left_column.pack(side="left")
 
-  label_what = Entry(frame_left_column, state="disabled", font=("Helvetica", 16), width=2)
+  label_what = Label(frame_left_column, state="disabled", font=("Helvetica", 16), width=2)
   label_what.pack(pady="7")
 
   buttons_memory = ("MC", "MR", "MS", "M+")
@@ -31,13 +35,11 @@ def _create_body(master:Frame) -> None:
   frame_body = Frame(master)
   frame_body.pack()
 
-  # Comands
   top_row = (("Backspace", 0), ("CE", 5), ("C", 10))
   for text, column in top_row:
     button = Button(frame_body, text=text, width=8, borderwidth=5, command=partial(_delete_from_display, text))
     button.grid(row=0, column=column, columnspan=5, padx=1, pady=5, sticky="ew")
 
-  # Inputs
   frame_inputs = Frame(frame_body)
   frame_inputs.grid(row=1, column=0, columnspan=15, rowspan=3, sticky="ew")
   
@@ -60,8 +62,28 @@ def _create_body(master:Frame) -> None:
 
 def _add_to_display(s:str) -> None:
   global label_display
-  label_display.config(text=label_display.cget("text")+s)
-  
+  global label_what
+  label_text:str = label_display.cget("text")
+  label_what.config(text="")
+  try:
+    match s:
+      case "+/-":
+        label_display.config(text=change_plus_minus(label_text))
+      case ".":
+        label_display.config(text=check_for_dots(label_text))
+      case "Sqrt":
+        label_display.config(text=toggle_sqrt(label_text))
+      case "%":
+        label_display.config(text=into_percent(label_text))
+      case "1/x":
+        label_display.config(text=divide_by(label_text))
+      case "=":    
+        label_display.config(text=str(eval(label_text)))
+      case _:
+        label_display.config(text=label_text+s)
+  except: 
+    label_what.config(text="Err")
+
 def _delete_from_display(s:str) -> None:
   global label_display
   match s:
@@ -77,3 +99,4 @@ def _delete_from_display(s:str) -> None:
         label_display.config(text=text[0:-4])
       else: 
         label_display.config(text=text[0:-1])
+        
