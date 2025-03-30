@@ -1,5 +1,4 @@
-import os
-from tkinter import Frame, PhotoImage, Tk
+from imports.main import *
 from contents import create_calculator
 
 window = Tk()

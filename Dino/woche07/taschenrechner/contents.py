@@ -1,7 +1,4 @@
-from functools import partial
-from tkinter import END, Button, Frame, Label
-from utils import *
-from math import sqrt # damit eval() wurzeln berechnen kann
+from imports.contents import * 
 
 label_display:Label
 label_what:Label
@@ -90,7 +87,7 @@ def _delete_from_display(s:str) -> None:
     case "C":
       label_display.config(text="")
     case "CE":
-      label_display.config(text="") # noch keine funktion zwischenrechnungen zu speichern
+      label_display.config(text="") # keine Funktion zwischenrechnungen zu speichern
     case "Backspace":
       text = label_display.cget("text")
       if text == "":
@@ -99,4 +96,3 @@ def _delete_from_display(s:str) -> None:
         label_display.config(text=text[0:-4])
       else: 
         label_display.config(text=text[0:-1])
-        
