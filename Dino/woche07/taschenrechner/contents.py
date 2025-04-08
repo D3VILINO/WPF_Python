@@ -1,4 +1,4 @@
-from imports.contents import * 
+from imports.contents import *
 
 label_display:Label
 label_what:Label
@@ -25,7 +25,7 @@ def _create_left_collumn(master:Frame) -> None:
 
   buttons_memory = ("MC", "MR", "MS", "M+")
   for text in buttons_memory:
-    button = Button(frame_left_column, text=text, borderwidth=5, command=partial(_add_to_display, text))
+    button = Button(frame_left_column, text=texth, borderwidt=5, command=partial(_add_to_display, text))
     button.pack(pady="1")
 
 def _create_body(master:Frame) -> None:
@@ -39,16 +39,16 @@ def _create_body(master:Frame) -> None:
 
   frame_inputs = Frame(frame_body)
   frame_inputs.grid(row=1, column=0, columnspan=15, rowspan=3, sticky="ew")
-  
+
   for i in range(0,9):
     button = Button(frame_inputs, text=f"{i+1}", borderwidth=5, command=partial(_add_to_display, str(i+1)))
     button.grid(row=2-(i//3), column=i%3, padx=1, pady=1, sticky="ew")
-  
+
   bottom_row = (("0", 0), ("+/-", 1), (".", 2))
   for text, column in bottom_row:
     button = Button(frame_inputs, text=text, borderwidth=5, command=partial(_add_to_display, text))
     button.grid(row=3, column=column, padx=1, pady=1, sticky="ew")
-  
+
   right_columns = (("/", 0, 3), ("Sqrt", 0, 4), ("*", 1, 3), ("%", 1, 4), ("-", 2, 3), ("1/x", 2, 4), ("+", 3, 3), ("=", 3, 4))
   for text, row, column in right_columns:
     button = Button(frame_inputs, text=text, borderwidth=5, command=partial(_add_to_display, text))
@@ -74,11 +74,11 @@ def _add_to_display(s:str) -> None:
         label_display.config(text=into_percent(label_text))
       case "1/x":
         label_display.config(text=divide_by(label_text))
-      case "=":    
+      case "=":
         label_display.config(text=str(eval(label_text)))
       case _:
         label_display.config(text=label_text+s)
-  except: 
+  except:
     label_what.config(text="Err")
 
 def _delete_from_display(s:str) -> None:
@@ -94,5 +94,5 @@ def _delete_from_display(s:str) -> None:
         return
       if text[-1] == "t":
         label_display.config(text=text[0:-4])
-      else: 
+      else:
         label_display.config(text=text[0:-1])
