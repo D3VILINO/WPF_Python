@@ -2,6 +2,9 @@ from functools import partial
 from tkinter import *
 from functions import *
 
+
+# Die Funktion "update password" funktioniert nicht. Da man es Löschen und hinzufügen kann, lag meine Priorität die anderen
+# zwei Aufgaben zu bearbeiten, da die Zeit knapp wird
 def create_header(frame:Frame) -> Label:
   frame_header:Frame = Frame(frame)
   frame_header.pack()

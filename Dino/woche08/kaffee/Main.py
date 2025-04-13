@@ -1,6 +1,8 @@
 from tkinter import *
 from functions import *
 
+
+# ich habe den Bezahlvorgang vergessen zu implementieren, aber leider keine Zeit mehr dies vor Abgabeende hinzuzufügen
 window:Tk = Tk()
 window.geometry("800x600")
 
