@@ -1,6 +1,6 @@
-from sympy import Eq, parse_expr, root, solve as n_solve #type: ignore
+from sympy import Eq, parse_expr, pretty, solve as n_solve  #type: ignore[import-untyped]
 import re
-from tkinter import Label
+from tkinter import END, Entry, Label
 
 def solve(function:str, output:Label) -> None:
   res:None|str | tuple[None,str] = validate_function(function)
@@ -14,15 +14,18 @@ def solve(function:str, output:Label) -> None:
   if check == None:
     operators:set[str] =  {"+", "-", "*", "/", "=", "^"}
     numbers:set[str] = set(str(i) for i in range(0,10))
-    unique:set|tuple = set(function)
-    unique = unique.difference(operators).difference(numbers) if isinstance(unique, set) else unique
-    unique = tuple(unique)
+    unique_set:set = set(function)
+    unique_set = unique_set.difference(operators).difference(numbers)
+    unique = tuple(unique_set)
 
     left, right = function.split("=")
     eq = Eq(parse_expr(left), parse_expr(right))
 
     solve_to = unique[0]
-    output.config(text=str(solve_to) + "=" + (str(n_solve(eq, solve_to)))[1:-1])
+    solved_res = n_solve(eq, solve_to)
+    # text:str = str(pretty(solved_res, use_unicode=True))
+    text = str(solved_res)[1:-1]
+    output.config(text=str(solve_to) + "=" + text)
   else:
     output.config(text=check)
 
@@ -48,9 +51,10 @@ def validate_function(function:str) -> str | tuple[None, str]:
   if len(unique) != 2:
     return "Dieses Programm läuft nur bei genau zwei\nunterschiedlichen Variablen. (Bsp: 2x + y - 5 = 3x)"
 
-  # Valide Ausdrücke
+  # Valide Ausdrücke / in Valide Ausdrücke umformen
   for var in unique:
     function = re.sub(f"([0-9])({var})", r"\1*\2", function)
+  function = re.sub(r"([\^])", r"**", function)
 
   function_left:str = function.split("=")[0]
   function_right:str = function.split("=")[1]
@@ -62,3 +66,6 @@ def validate_function(function:str) -> str | tuple[None, str]:
 
   return (None, function)
 
+def test_import(entry:Entry) -> None:
+  entry.delete(0, END)
+  entry.insert(0, "3x^2 = -7x^2 + 250y")
