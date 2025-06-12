@@ -1,4 +1,4 @@
-from sympy import Eq, parse_expr, root, solve as n_solve
+from sympy import Eq, parse_expr, root, solve as n_solve #type: ignore
 import re
 from tkinter import Label
 
@@ -13,9 +13,9 @@ def solve(function:str, output:Label) -> None:
 
   if check == None:
     operators:set[str] =  {"+", "-", "*", "/", "=", "^"}
-    numbers:set[int] = set(i for i in range(0,10))
-    unique:set = set(function)
-    unique = unique.difference(operators).difference(numbers)
+    numbers:set[str] = set(str(i) for i in range(0,10))
+    unique:set|tuple = set(function)
+    unique = unique.difference(operators).difference(numbers) if isinstance(unique, set) else unique
     unique = tuple(unique)
 
     left, right = function.split("=")
@@ -26,7 +26,7 @@ def solve(function:str, output:Label) -> None:
   else:
     output.config(text=check)
 
-def validate_function(function:str) -> None | str:
+def validate_function(function:str) -> str | tuple[None, str]:
   find:int = function.find("=")
   rfind:int = function.rfind("=")
 
@@ -42,7 +42,7 @@ def validate_function(function:str) -> None | str:
 
   # Variablen Anzahl
   operators:set[str] =  {"+", "-", "*", "/", "=", "^"}
-  numbers:set[int] = set(str(i) for i in range(0,10))
+  numbers:set[str] = set(str(i) for i in range(0,10))
   unique:set = set(function)
   unique = unique.difference(operators).difference(numbers)
   if len(unique) != 2:
