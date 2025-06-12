@@ -37,6 +37,7 @@ def test(root):
 def create_body(root:Frame) -> None:
   body_frame:Frame = Frame(root)
   button_frame:Frame = Frame(body_frame)
+  window_button_frame:Frame = Frame(body_frame)
 
   info_label = Label(body_frame, text="Geben Sie hier Ihre lineare Funktion ein: ")
   solution:Label = Label(body_frame, font=("Courier New", 12))
@@ -46,16 +47,21 @@ def create_body(root:Frame) -> None:
 
   solve_button:Button = Button(button_frame, text="Lösen", command=lambda:solve(entry.get().replace(" ", ""), solution), width=8)
   delete_button:Button = Button(button_frame, text="Löschen", command=lambda: entry.delete(0, END), width=8)
-  test_button:Button = Button(button_frame, text="insert", command=lambda: test_import(entry))
+  test_button:Button = Button(button_frame, text="insert", command=lambda: test_import(entry), width=8)
 
-  test_test_button:Button = Button(button_frame, text="test test", command=lambda: test(root))
+
+  create_graph_button:Button = Button(window_button_frame, text="Graphen anzeigen", command=lambda: test(root))
+  create_pretty_button:Button = Button(window_button_frame, text="Formatierte Lösung anzeigen", command=lambda: test(root))
 
   body_frame.pack()
   info_label.pack()
   entry.pack()
-  button_frame.pack(pady=8)
-  solve_button.grid(row=0, column=0, padx=4)
-  delete_button.grid(row=0, column=1, padx=4)
-  test_button.grid(row=0, column=2)
-  test_test_button.grid(row=0, column=3)
+  button_frame.pack(pady=4)
+  solve_button.grid(row=0, column=0,  padx=4,)
+  delete_button.grid(row=0, column=1,  padx=4)
+  test_button.grid(row=0, column=2, padx=4)
+
+  window_button_frame.pack(pady=4)
+  create_graph_button.grid(row=0, column=0, padx=4)
+  create_pretty_button.grid(row=0, column=1, padx=4)
   solution.pack()
