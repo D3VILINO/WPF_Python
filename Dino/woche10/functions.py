@@ -13,7 +13,7 @@ def solve(function:str, output:Label) -> None:
 
   if check == None:
     operators:set[str] =  {"+", "-", "*", "/", "=", "^"}
-    numbers:set[int] = set(str(i) for i in range(0,10))
+    numbers:set[int] = set(i for i in range(0,10))
     unique:set = set(function)
     unique = unique.difference(operators).difference(numbers)
     unique = tuple(unique)
