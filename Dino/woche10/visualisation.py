@@ -1,5 +1,5 @@
 from tkinter import *
-from functions import solve, test_import
+from functions import add_solution, pretty_expr, solve, test_import
 
 def open_window():
   window:Tk = Tk() #type:ignore[annotation-unchecked]
@@ -9,49 +9,61 @@ def open_window():
   root:Frame = Frame(window) #type:ignore[annotation-unchecked]
   root.pack()
 
-  create_header(root)
-  create_body(root)
+  create_header(root, "Lineares Gleichungssystem lösen")
+  create_body_master(root)
 
   window.mainloop()
 
 
-def create_header(root:Frame) -> None:
+def create_header(root:Frame, text:str) -> None:
   header_frame:Frame = Frame(root)
   header_frame.pack(pady=20)
 
-  Label(header_frame, text="="*30, font=("Courier New", 12)).pack()
-  Label(header_frame, text="Lineares Gleichungssystem lösen", font=("Courier New", 12)).pack()
-  Label(header_frame, text="="*30, font=("Courier New", 12)).pack()
+  Label(header_frame, text="="*30, font=("TKDefaultFont", 12)).pack()
+  Label(header_frame, text=text, font=("TKDefaultFont", 12)).pack()
+  Label(header_frame, text="="*30, font=("TKDefaultFont", 12)).pack()
 
-def test(root):
-  window = Toplevel(root) #type:ignore[annotation-unchecked]
+def create_window_pretty(master, func):
+  window = Toplevel(master) #type:ignore[annotation-unchecked]
   window.geometry("300x300")
   window.resizable(False,False)
+  window.title("Formatierter Term")
 
   root:Frame = Frame(window) #type:ignore[annotation-unchecked]
   root.pack()
 
+  create_header(root, "Formatierter Term")
+  create_body_pretty(root, func)
+
   window.mainloop()
 
+def create_body_pretty(root:Frame, func:str) -> None:
+  body_frame:Frame = Frame(root)
+  body_frame.pack()
 
-def create_body(root:Frame) -> None:
+  pretty_label:Label = Label(body_frame, font=("TKDefaultFont", 12))
+  text:str = add_solution(func, pretty_label, pretty=True) or "Es gab ein Programmfehler"
+  pretty_label.config(text=text)
+  pretty_label.pack()
+
+def create_body_master(root:Frame) -> None:
   body_frame:Frame = Frame(root)
   button_frame:Frame = Frame(body_frame)
   window_button_frame:Frame = Frame(body_frame)
 
-  info_label = Label(body_frame, text="Geben Sie hier Ihre lineare Funktion ein: ")
-  solution:Label = Label(body_frame, font=("Courier New", 12))
+  info_label:Label = Label(body_frame, text="Geben Sie hier Ihre lineare Funktion ein: ")
+  solution:Label = Label(body_frame, font=("TKDefaultFont", 12))
 
   entry:Entry = Entry(body_frame)
   entry.bind("<Return>", lambda e: solve_button.invoke())
 
-  solve_button:Button = Button(button_frame, text="Lösen", command=lambda:solve(entry.get().replace(" ", ""), solution), width=8)
+  solve_button:Button = Button(button_frame, text="Lösen", command=lambda:add_solution(entry.get().replace(" ", ""), solution), width=8)
   delete_button:Button = Button(button_frame, text="Löschen", command=lambda: entry.delete(0, END), width=8)
   test_button:Button = Button(button_frame, text="insert", command=lambda: test_import(entry), width=8)
 
 
-  create_graph_button:Button = Button(window_button_frame, text="Graphen anzeigen", command=lambda: test(root))
-  create_pretty_button:Button = Button(window_button_frame, text="Formatierte Lösung anzeigen", command=lambda: test(root))
+  create_graph_button:Button = Button(window_button_frame, text="Graphen anzeigen")
+  create_pretty_button:Button = Button(window_button_frame, text="Formatierte Lösung anzeigen", command=lambda: create_window_pretty(root, entry.get()))
 
   body_frame.pack()
   info_label.pack()

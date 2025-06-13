@@ -1,8 +1,31 @@
-from sympy import Eq, parse_expr, pretty, solve as n_solve  #type: ignore[import-untyped]
+from sympy import Eq, parse_expr, pretty, solve, sstr  #type: ignore[import-untyped]
 import re
 from tkinter import END, Entry, Label
 
-def solve(function:str, output:Label) -> None:
+def make_parsable(function:str) -> str:
+  function = function.replace(" ", "")
+  operators:set[str] =  {"+", "-", "*", "/", "=", "^"}
+  numbers:set[str] = set(str(i) for i in range(0,10))
+  unique:set = set(function)
+  unique = unique.difference(operators).difference(numbers)
+  function = re.sub(r"([\^])", r"**", function)
+  for var in unique:
+    function = re.sub(f"([0-9])({var})", r"\1*\2", function)
+  return function
+
+def add_solution(function:str, label:Label, pretty:bool = False) -> None | str:
+  function = make_parsable(function)
+  solution = my_solve(function)
+  print(solution)
+  print(function)
+  solve_to, r_expr = solution.replace(" ", "").split("=")
+
+  if pretty:
+    return pretty_expr(r_expr)
+  label.config(text=solve_to + "=" + r_expr)
+  return None
+
+def my_solve(function:str) -> str:
   res:None|str | tuple[None,str] = validate_function(function)
 
   if isinstance(res, tuple):
@@ -22,12 +45,12 @@ def solve(function:str, output:Label) -> None:
     eq = Eq(parse_expr(left), parse_expr(right))
 
     solve_to = unique[0]
-    solved_res = n_solve(eq, solve_to)
+    solved_res = solve(eq, solve_to)
     # text:str = str(pretty(solved_res, use_unicode=True))
     text = str(solved_res)[1:-1]
-    output.config(text=str(solve_to) + "=" + text)
+    return solve_to + " = " + text
   else:
-    output.config(text=check)
+    return check
 
 def validate_function(function:str) -> str | tuple[None, str]:
   find:int = function.find("=")
@@ -65,6 +88,13 @@ def validate_function(function:str) -> str | tuple[None, str]:
     return "Ihre Gleichung scheint inkorrekte Stellen zu haben"
 
   return (None, function)
+
+def pretty_expr(function:str) -> str:
+  expr = str(parse_expr(function))
+  if expr.find("**"):
+    exponents = expr.split("**")
+  print(expr)
+  return expr
 
 def test_import(entry:Entry) -> None:
   entry.delete(0, END)
