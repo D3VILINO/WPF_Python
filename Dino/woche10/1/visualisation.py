@@ -1,5 +1,5 @@
 from tkinter import *
-from functions import add_solution, pretty_expr, solve, test_import
+from functions import add_solution, solve, test_import
 
 def open_window():
   window:Tk = Tk() #type:ignore[annotation-unchecked]
@@ -42,7 +42,7 @@ def create_body_pretty(root:Frame, func:str) -> None:
   body_frame.pack()
 
   pretty_label:Label = Label(body_frame, font=("TKDefaultFont", 12))
-  text:str = add_solution(func, pretty_label, pretty=True) or "Es gab ein Programmfehler"
+  text:str = add_solution(func, pretty_label, do_pretty=True) or "Es gab ein Programmfehler"
   pretty_label.config(text=text)
   pretty_label.pack()
 
