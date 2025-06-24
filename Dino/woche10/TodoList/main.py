@@ -1,5 +1,9 @@
 from visualisation import open_window
 
+# Ich wollte eigentlich ein anderes Projekt machen aber auch nach 2 Wochen hat es nicht geklappt...
+# Deswegen sehen sie hier eine sehr peinliche Abgabe :)
+
+# Um sicherzugehen, dass Sachen gecatcht werden, selbst wenn ich es woanders vergessen sollte
 try:
   open_window()
 except BaseException as e:
