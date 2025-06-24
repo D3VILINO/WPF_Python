@@ -1,8 +1,7 @@
-from tkinter import *
-
+from tkinter import END, Frame, Label, Tk, Toplevel, Entry, Button
+from matplotlib import pyplot as plt
 import numpy as np
 import functions as fnc
-from matplotlib import pyplot as plt
 
 windows:dict[str,Tk|Toplevel] = {"main":Tk()} #type: ignore[annotation-unchecked]
 
